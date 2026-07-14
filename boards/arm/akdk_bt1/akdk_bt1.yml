@@ -5,6 +5,7 @@ arch: arm
 toolchain:
   - zephyr
   - gnuarmemb
+qualifiers: []
 supported:
   - adc
   - usb_device
