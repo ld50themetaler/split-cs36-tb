@@ -1,0 +1,14 @@
+
+if SHIELD_SPLIT_CS36_TB_RIGHT
+
+config ZMK_KEYBOARD_NAME
+    default "split_cs36_tb"
+
+endif
+
+if SHIELD_SPLIT_CS36_TB_LEFT || SHIELD_SPLIT_CS36_TB_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+endif

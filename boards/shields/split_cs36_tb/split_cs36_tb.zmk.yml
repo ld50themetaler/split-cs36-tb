@@ -1,0 +1,14 @@
+
+file_format: "1"
+id: split_cs36_tb
+name: split_cs36_tb
+type: shield
+features:
+  - keys
+  - studio
+outputs:
+  - usb
+  - ble
+siblings:
+  - split_cs36_tb_left
+  - split_cs36_tb_right
