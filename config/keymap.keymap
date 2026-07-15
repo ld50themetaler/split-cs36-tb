@@ -84,15 +84,15 @@
 &kp F1              &kp F2   &kp F3               &kp F4           &kp F5      &none             &kp HOME   &kp PAGE_DOWN  &kp PG_UP  &kp END
 &kp F6              &kp F7   &mt LCTRL F8         &kp F9           &kp F10     &macro_alt_grave  &kp LEFT   &kp DOWN       &kp UP     &kp RIGHT
 &mt LEFT_SHIFT F11  &kp F12  &kp PRINTSCREEN      &kp PAUSE_BREAK  &kp INSERT  &mkp MCLK         &mkp LCLK  &mo 4          &mkp RCLK  &none
-                    &trans   &mt LEFT_ALT DELETE  &trans           &trans      &none             &none
+                    &trans   &mt LEFT_ALT DELETE  &trans           &trans      &trans            &trans
             >;
         };
 
         layer_2 {
             bindings = <
-&kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6      &kp NUMBER_7       &kp NUMBER_8  &kp NUMBER_9  &kp NUMBER_0
-&trans        &trans        &kp ESCAPE    &trans        &kp TAB       &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp SLASH     &kp EQUAL     &kp MINUS
-&trans        &trans        &trans        &trans        &trans        &trans            &trans             &tog 1        &trans        &trans
+&kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6      &kp NUMBER_7          &kp NUMBER_8  &kp NUMBER_9  &kp NUMBER_0
+&trans        &trans        &kp ESCAPE    &trans        &kp TAB       &kp LEFT_BRACKET  &kp RIGHT_BRACKET     &kp SLASH     &kp EQUAL     &kp MINUS
+&trans        &trans        &trans        &trans        &trans        &kp GRAVE         &kp NON_US_BACKSLASH  &tog 1        &trans        &trans
               &trans        &trans        &trans        &trans        &trans            &trans
             >;
         };
