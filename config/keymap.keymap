@@ -4,6 +4,37 @@
 #include <dt-bindings/zmk/pointing.h>
 
 / {
+
+    behaviors {
+        // デフォルトのMod-Tap(&mt)の挙動を上書きし、QMK風の快適な設定に変更します
+
+        mt: mod_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+
+            // --- ここからがカスタマイズ項目です ---
+            // タップとホールドを認識する時間。200msに設定。
+
+            tapping-term-ms = <200>;
+
+            // 'tap-preferred'フレーバーを選択。
+            // これにより、高速でキーを連続入力（ローリング）した際に、
+            // ホールド（モディファイア）が誤爆するのを防ぎます。
+            // QMKの`IGNORE_MOD_TAP_INTERRUPT`に近い挙動です。
+
+            flavor = "tap-preferred";
+
+            // (オプション) この時間内の素早い連続タップは、強制的にタップとして扱います。
+            // これにより、スペースキーやエンターキーの連続タップがより確実になります。
+
+            quick-tap-ms = <150>;
+
+            // --- ここまでがカスタマイズ項目です ---
+
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -41,7 +72,7 @@
 
         layer_0 {
             bindings = <
-&kp SQT                   &kp COMMA  &kp PERIOD              &kp P  &kp Y                 &kp F            &kp G  &kp C        &kp R  &kp L
+&mt LGUI SQT              &kp COMMA  &lt 5 PERIOD            &kp P  &kp Y                 &kp F            &kp G  &kp C        &kp R  &kp L
 &kp A                     &kp O      &mt LCTRL E             &kp U  &kp I                 &kp D            &kp H  &mt RCTRL T  &kp N  &kp S
 &mt LEFT_SHIFT SEMICOLON  &kp Q      &kp J                   &kp K  &kp X                 &kp B            &kp M  &kp W        &kp V  &mt RIGHT_SHIFT Z
                           &mo 3      &mt LEFT_ALT BACKSPACE  &mo 1  &mt LEFT_SHIFT SPACE  &mt RCTRL ENTER  &mo 2
@@ -52,7 +83,7 @@
             bindings = <
 &kp F1              &kp F2   &kp F3               &kp F4           &kp F5      &none             &kp HOME   &kp PAGE_DOWN  &kp PG_UP  &kp END
 &kp F6              &kp F7   &mt LCTRL F8         &kp F9           &kp F10     &macro_alt_grave  &kp LEFT   &kp DOWN       &kp UP     &kp RIGHT
-&mt LEFT_SHIFT F11  &kp F12  &kp PRINTSCREEN      &kp PAUSE_BREAK  &kp INSERT  &mkp MCLK         &mkp LCLK  &none          &mkp RCLK  &none
+&mt LEFT_SHIFT F11  &kp F12  &kp PRINTSCREEN      &kp PAUSE_BREAK  &kp INSERT  &mkp MCLK         &mkp LCLK  &mo 4          &mkp RCLK  &none
                     &trans   &mt LEFT_ALT DELETE  &trans           &trans      &none             &none
             >;
         };
@@ -62,7 +93,7 @@
 &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6      &kp NUMBER_7       &kp NUMBER_8  &kp NUMBER_9  &kp NUMBER_0
 &trans        &trans        &kp ESCAPE    &trans        &kp TAB       &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp SLASH     &kp EQUAL     &kp MINUS
 &trans        &trans        &trans        &trans        &trans        &trans            &trans             &tog 1        &trans        &trans
-              &trans        &trans        &trans        &trans        &none             &none
+              &trans        &trans        &trans        &trans        &trans            &trans
             >;
         };
 
@@ -78,8 +109,8 @@
         layer_4 {
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&kp LCTRL  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&kp LSHIFT &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
         &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
