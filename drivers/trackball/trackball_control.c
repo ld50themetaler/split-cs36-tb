@@ -277,6 +277,7 @@ static void automouse_timeout_handler(struct k_work *work)
 {
     if (g_tb.automouse_active) {
         g_tb.automouse_active = false;
+        g_tb.scroll_mode = false; // Failsafe: reset scroll mode on automouse exit
         if (zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
             zmk_keymap_layer_deactivate(MOUSE_LAYER_ID);
             LOG_INF("Auto-Mouse: layer %d deactivated due to timeout", MOUSE_LAYER_ID);
@@ -450,6 +451,7 @@ void trackball_control_toggle_automouse(void)
     g_tb.automouse_enabled = !g_tb.automouse_enabled;
     if (!g_tb.automouse_enabled && g_tb.automouse_active) {
         g_tb.automouse_active = false;
+        g_tb.scroll_mode = false; // Failsafe: reset scroll mode on automouse disable
         k_work_cancel_delayable(&g_tb.automouse_timeout_work);
         if (zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
             zmk_keymap_layer_deactivate(MOUSE_LAYER_ID);
@@ -627,6 +629,7 @@ static int position_state_listener(const zmk_event_t *eh)
         } else {
             // Non-mouse typing key pressed: immediately dismiss auto-mouse layer for seamless typing
             g_tb.automouse_active = false;
+            g_tb.scroll_mode = false; // Failsafe: reset scroll mode on typing dismissal
             k_work_cancel_delayable(&g_tb.automouse_timeout_work);
             if (zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
                 zmk_keymap_layer_deactivate(MOUSE_LAYER_ID);
