@@ -6,3 +6,8 @@ description: Trackball management behavior
 compatible: zmk,behavior-trackball
 
 include: one_param.yaml
+
+properties:
+  bindings:
+    type: phandle-array
+    required: false
