@@ -4,5 +4,6 @@ firmware/
 *.uf2
 *.bin
 *.code-workspace
+!config/zmk-workspace.code-workspace
 .DS_Store
 Thumbs.db
