@@ -1,0 +1,15 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config SPLIT_CS36_TB_TRACKBALL
+	bool "Advanced Trackball Controller for split-cs36-tb"
+	depends on !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
+	default y
+	help
+	  Enable advanced trackball subsystem (acceleration, dynamic speed, rotation, automouse, momentary scroll, NVS).
+
+menuconfig PAW3222
+	bool "PAW3222 mouse optical sensor"
+	select SPI
+	help
+	  Enable PAW3222 mouse optical sensor.

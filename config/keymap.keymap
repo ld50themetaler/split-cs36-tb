@@ -2,6 +2,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/trackball.h>
 
 / {
 
@@ -99,19 +100,19 @@
 
         layer_3 {
             bindings = <
-&bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR  &none  &none  &none  &bt BT_CLR_ALL
-&none         &none         &none         &none         &none         &none       &none  &none  &none  &none
-&none         &none         &none         &none         &none         &none       &none  &none  &none  &none
-              &trans        &none         &none         &none         &none       &none
+&bt BT_SEL 0       &bt BT_SEL 1       &bt BT_SEL 2        &bt BT_SEL 3    &bt BT_SEL 4        &bt BT_CLR      &none          &none           &none          &bt BT_CLR_ALL
+&tb TB_SPD_UP      &tb TB_SPD_DN      &tb TB_SCRL_UP      &tb TB_SCRL_DN  &tb TB_ACCEL_TOG    &tb TB_ROT_CCW  &tb TB_ROT_CW  &tb TB_ROT_RES  &tb TB_AM_TOG  &none
+&tb TB_AM_TIME_UP  &tb TB_AM_TIME_DN  &tb TB_AM_TIME_RES  &none           &none               &none           &none          &none           &none          &none
+                   &trans             &none               &none           &none               &none           &none
             >;
         };
 
         layer_4 {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&kp LCTRL  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&kp LSHIFT &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-        &trans  &trans  &trans  &trans  &trans  &trans
+&trans      &trans  &trans  &trans  &trans  &trans     &trans     &trans     &trans     &trans
+&kp LCTRL   &trans  &trans  &trans  &trans  &mkp MCLK  &mkp LCLK  &trans     &mkp RCLK  &trans
+&kp LSHIFT  &trans  &trans  &trans  &trans  &trans     &trans     &trans     &trans     &trans
+                    &trans  &trans  &trans  &tb TB_SCRL_MO &trans &trans
             >;
         };
 

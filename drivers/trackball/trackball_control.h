@@ -1,0 +1,72 @@
+/*
+ * Advanced Trackball Control Subsystem for split-cs36-tb
+ * Ported and enhanced from Kugel-1
+ * Copyright (c) 2024 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ */
+
+#ifndef ZEPHYR_DRIVERS_TRACKBALL_CONTROL_H_
+#define ZEPHYR_DRIVERS_TRACKBALL_CONTROL_H_
+
+#include <stdbool.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern C {
+#endif
+
+// Layer IDs (must match split_cs36_tb keymap)
+#define MOUSE_LAYER_ID 4
+#define SNIPE_LAYER_ID 5
+
+// Key Matrix typing key boundary (0..29 are finger keys, 30..35 are thumb keys)
+#define TYPING_KEY_POSITION_LIMIT 30
+
+// Initialization
+void trackball_control_init(void);
+
+// Motion Hook: called on each motion event from sensor driver
+void trackball_control_on_motion(int8_t dx, int8_t dy);
+
+// Speed & Mode Queries
+void trackball_control_calculate_motion(int dx, int dy, int *out_dx, int *out_dy);
+int trackball_control_get_scroll_div(void);
+bool trackball_control_is_sniper_active(void);
+bool trackball_control_is_scroll_mode(void);
+void trackball_control_set_scroll_mode(bool enable);
+void trackball_control_toggle_scroll_mode(void);
+
+// Dynamic Pointer Speed Control (Level 1: 2.50x to Level 16: 0.19x, Level 8: 1.00x default)
+void trackball_control_speed_up(void);
+void trackball_control_speed_down(void);
+uint8_t trackball_control_get_speed_level(void);
+
+// Dynamic Scroll Sensitivity Control (Level 1: div 36 (Slow/Smooth) to Level 6: div 6 (Fast))
+void trackball_control_scroll_speed_up(void);
+void trackball_control_scroll_speed_down(void);
+uint8_t trackball_control_get_scroll_level(void);
+
+// Auto-Mouse Layer Control
+void trackball_control_toggle_automouse(void);
+bool trackball_control_is_automouse_enabled(void);
+void trackball_control_automouse_time_up(void);
+void trackball_control_automouse_time_down(void);
+void trackball_control_automouse_time_reset(void);
+uint16_t trackball_control_get_automouse_time(void);
+
+// Acceleration Control
+void trackball_control_toggle_acceleration(void);
+bool trackball_control_is_acceleration_enabled(void);
+
+// Dynamic Rotation Angle Control (-180 deg to +180 deg in 10-deg steps)
+void trackball_control_rotate_cw(void);
+void trackball_control_rotate_ccw(void);
+void trackball_control_rotate_reset(void);
+int16_t trackball_control_get_rotation_angle(void);
+void trackball_control_rotate_motion(int in_dx, int in_dy, int *out_dx, int *out_dy);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* ZEPHYR_DRIVERS_TRACKBALL_CONTROL_H_ */

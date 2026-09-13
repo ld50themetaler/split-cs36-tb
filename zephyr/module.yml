@@ -1,3 +1,7 @@
+name: split-cs36-tb
 build:
+  cmake: .
+  kconfig: Kconfig
   settings:
     board_root: .
+    dts_root: .

@@ -1,0 +1,8 @@
+.build/
+build/
+firmware/
+*.uf2
+*.bin
+*.code-workspace
+.DS_Store
+Thumbs.db
