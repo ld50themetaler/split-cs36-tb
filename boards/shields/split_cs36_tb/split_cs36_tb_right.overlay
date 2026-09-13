@@ -90,8 +90,6 @@
         compatible = "pixart,paw3222";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        irq-gpios = <&gpio0 24 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        power-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
-        res-cpi = <1064>;
+        irq-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
     };
 };

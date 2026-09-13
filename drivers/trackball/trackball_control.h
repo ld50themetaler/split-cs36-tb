@@ -26,7 +26,7 @@ extern C {
 void trackball_control_init(void);
 
 // Motion Hook: called on each motion event from sensor driver
-void trackball_control_on_motion(int8_t dx, int8_t dy);
+void trackball_control_on_motion(int dx, int dy);
 
 // Speed & Mode Queries
 void trackball_control_calculate_motion(int dx, int dy, int *out_dx, int *out_dy);

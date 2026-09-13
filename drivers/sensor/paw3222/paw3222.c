@@ -85,6 +85,7 @@ struct paw32xx_data {
     int scroll_x_accum;
 };
 
+#if DT_INST_NODE_HAS_PROP(0, power_gpios)
 static int paw32xx_force_cs(const struct device *dev, bool force_low) {
     const struct paw32xx_config *cfg = dev->config;
     const struct gpio_dt_spec *cs = NULL;
@@ -107,6 +108,7 @@ static int paw32xx_force_cs(const struct device *dev, bool force_low) {
 
     return 0;
 }
+#endif
 
 // Define a custom sign_extend function to avoid conflict with Zephyr's implementation
 static inline int32_t _sign_extend(uint32_t value, uint8_t index) {
@@ -282,8 +284,8 @@ static void paw32xx_motion_work_handler(struct k_work *work) {
     LOG_DBG("raw x=%4d y=%4d", x, y);
 
     // Initial axis inversion (matching split-cs36-tb physical sensor orientation)
-    int8_t dx = -x;
-    int8_t dy = -y;
+    int dx = -x;
+    int dy = -y;
 
     if (dx != 0 || dy != 0) {
         // Notify control subsystem (triggers auto-mouse layer timer)
@@ -313,13 +315,13 @@ static void paw32xx_motion_work_handler(struct k_work *work) {
 
             if (abs(data->scroll_y_accum) >= div) {
                 int wheel_steps = -(data->scroll_y_accum / div);
-                input_report_rel(data->dev, INPUT_REL_WHEEL, wheel_steps, true, K_FOREVER);
+                input_report_rel(data->dev, INPUT_REL_WHEEL, wheel_steps, true, K_NO_WAIT);
                 data->scroll_y_accum %= div;
             }
 
             if (abs(data->scroll_x_accum) >= div) {
                 int hwheel_steps = (data->scroll_x_accum / div);
-                input_report_rel(data->dev, INPUT_REL_HWHEEL, hwheel_steps, true, K_FOREVER);
+                input_report_rel(data->dev, INPUT_REL_HWHEEL, hwheel_steps, true, K_NO_WAIT);
                 data->scroll_x_accum %= div;
             }
         } else {
@@ -328,8 +330,8 @@ static void paw32xx_motion_work_handler(struct k_work *work) {
                 int final_dx = 0, final_dy = 0;
                 trackball_control_calculate_motion(rot_dx, rot_dy, &final_dx, &final_dy);
 
-                input_report_rel(data->dev, INPUT_REL_X, final_dx, false, K_FOREVER);
-                input_report_rel(data->dev, INPUT_REL_Y, final_dy, true, K_FOREVER);
+                input_report_rel(data->dev, INPUT_REL_X, final_dx, false, K_NO_WAIT);
+                input_report_rel(data->dev, INPUT_REL_Y, final_dy, true, K_NO_WAIT);
             }
         }
     }

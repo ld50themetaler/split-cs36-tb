@@ -284,7 +284,7 @@ static void automouse_timeout_handler(struct k_work *work)
     }
 }
 
-void trackball_control_on_motion(int8_t dx, int8_t dy)
+void trackball_control_on_motion(int dx, int dy)
 {
     if (!g_tb.automouse_enabled) {
         return;
