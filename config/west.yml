@@ -6,10 +6,16 @@ manifest:
       url-base: https://github.com/sekigon-gonnoc
     - name: kot149
       url-base: https://github.com/kot149
+    - name: prospector
+      url-base: https://github.com/t-ogura
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: v0.3
       import: app/west.yml
+    - name: prospector-zmk-module
+      remote: prospector
+      revision: v2.2b
+      path: modules/prospector-zmk-module
   self:
     path: config
