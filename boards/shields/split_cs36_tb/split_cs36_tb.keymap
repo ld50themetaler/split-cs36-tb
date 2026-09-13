@@ -7,6 +7,12 @@
 / {
 
     behaviors {
+        tb: behavior_trackball {
+            compatible = "zmk,behavior-trackball";
+            #binding-cells = <1>;
+            label = "TRACKBALL";
+        };
+
         // デフォルトのMod-Tap(&mt)の挙動を上書きし、QMK風の快適な設定に変更します
 
         mt: mod_tap {
