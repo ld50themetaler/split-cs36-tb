@@ -88,6 +88,100 @@
             wait-ms = <5>;
             tap-ms = <5>;
         };
+
+        tb_scrl_mo: tb_scrl_mo {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press &tb TB_SCRL_MO>,
+                <&macro_pause_for_release>,
+                <&macro_release &tb TB_SCRL_MO>;
+            label = "TB_SCRL_MO";
+        };
+
+        tb_spd_up: tb_spd_up {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_SPD_UP>;
+            label = "TB_SPD_UP";
+        };
+
+        tb_spd_dn: tb_spd_dn {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_SPD_DN>;
+            label = "TB_SPD_DN";
+        };
+
+        tb_am_tog: tb_am_tog {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_AM_TOG>;
+            label = "TB_AM_TOG";
+        };
+
+        tb_scrl_up: tb_scrl_up {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_SCRL_UP>;
+            label = "TB_SCRL_UP";
+        };
+
+        tb_scrl_dn: tb_scrl_dn {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_SCRL_DN>;
+            label = "TB_SCRL_DN";
+        };
+
+        tb_accel_tog: tb_accel_tog {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_ACCEL_TOG>;
+            label = "TB_ACCEL_TOG";
+        };
+
+        tb_rot_cw: tb_rot_cw {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_ROT_CW>;
+            label = "TB_ROT_CW";
+        };
+
+        tb_rot_ccw: tb_rot_ccw {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_ROT_CCW>;
+            label = "TB_ROT_CCW";
+        };
+
+        tb_rot_res: tb_rot_res {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_ROT_RES>;
+            label = "TB_ROT_RES";
+        };
+
+        tb_am_time_up: tb_am_time_up {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_AM_TIME_UP>;
+            label = "TB_AM_TIME_UP";
+        };
+
+        tb_am_time_dn: tb_am_time_dn {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_AM_TIME_DN>;
+            label = "TB_AM_TIME_DN";
+        };
+
+        tb_am_time_res: tb_am_time_res {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tb TB_AM_TIME_RES>;
+            label = "TB_AM_TIME_RES";
+        };
     };
 
     keymap {
@@ -106,7 +200,7 @@
             bindings = <
 &kp F1              &kp F2   &kp F3               &kp F4           &kp F5      &none             &kp HOME   &kp PAGE_DOWN  &kp PG_UP  &kp END
 &kp F6              &kp F7   &mt LCTRL F8         &kp F9           &kp F10     &macro_alt_grave  &kp LEFT   &kp DOWN       &kp UP     &kp RIGHT
-&mt LEFT_SHIFT F11  &kp F12  &kp PRINTSCREEN      &kp PAUSE_BREAK  &kp INSERT  &mkp MCLK         &mkp LCLK  &mo 4          &mkp RCLK  &none
+&mt LEFT_SHIFT F11  &kp F12  &kp PRINTSCREEN      &kp PAUSE_BREAK  &kp INSERT  &mkp MCLK         &mkp LCLK  &tb_scrl_mo    &mkp RCLK  &none
                     &trans   &mt LEFT_ALT DELETE  &trans           &trans      &trans            &trans
             >;
         };
@@ -122,10 +216,10 @@
 
         layer_3 {
             bindings = <
-&bt BT_SEL 0       &bt BT_SEL 1       &bt BT_SEL 2        &bt BT_SEL 3    &bt BT_SEL 4        &bt BT_CLR      &none          &none           &none          &bt BT_CLR_ALL
-&tb TB_SPD_UP      &tb TB_SPD_DN      &tb TB_SCRL_UP      &tb TB_SCRL_DN  &tb TB_ACCEL_TOG    &tb TB_ROT_CCW  &tb TB_ROT_CW  &tb TB_ROT_RES  &tb TB_AM_TOG  &none
-&tb TB_AM_TIME_UP  &tb TB_AM_TIME_DN  &tb TB_AM_TIME_RES  &none           &none               &none           &none          &none           &none          &none
-                   &trans             &none               &none           &none               &none           &none
+&bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2       &bt BT_SEL 3    &bt BT_SEL 4      &bt BT_CLR      &none       &none       &none       &bt BT_CLR_ALL
+&tb_spd_up      &tb_spd_dn      &tb_scrl_up        &tb_scrl_dn     &tb_accel_tog     &tb_rot_ccw     &tb_rot_cw  &tb_rot_res &tb_am_tog  &none
+&tb_am_time_up  &tb_am_time_dn  &tb_am_time_res    &none           &none             &none           &none       &none       &none       &none
+                &trans          &none              &none           &none             &none           &none
             >;
         };
 
@@ -134,7 +228,7 @@
 &trans      &trans  &trans  &trans  &trans  &trans     &trans     &trans     &trans     &trans
 &kp LCTRL   &trans  &trans  &trans  &trans  &mkp MCLK  &mkp LCLK  &trans     &mkp RCLK  &trans
 &kp LSHIFT  &trans  &trans  &trans  &trans  &trans     &trans     &trans     &trans     &trans
-                    &trans  &trans  &trans  &tb TB_SCRL_MO &trans &trans
+                    &trans  &trans  &trans  &tb_scrl_mo &trans &trans
             >;
         };
 
