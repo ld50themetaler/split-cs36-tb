@@ -295,7 +295,13 @@ static void paw32xx_motion_work_handler(struct k_work *work) {
         int rot_dx = 0, rot_dy = 0;
         trackball_control_rotate_motion(dx, dy, &rot_dx, &rot_dy);
 
+        static bool prev_in_scroll = false;
         bool in_scroll = trackball_control_is_scroll_mode();
+        if (in_scroll != prev_in_scroll) {
+            prev_in_scroll = in_scroll;
+            data->scroll_y_accum = 0;
+            data->scroll_x_accum = 0;
+        }
 
         if (in_scroll) {
             // Scroll Mode with Axis Lock:
@@ -311,7 +317,7 @@ static void paw32xx_motion_work_handler(struct k_work *work) {
             }
 
             int div = trackball_control_get_scroll_div();
-            if (div <= 0) div = 20;
+            if (div <= 0) div = 60;
 
             if (abs(data->scroll_y_accum) >= div) {
                 int wheel_steps = -(data->scroll_y_accum / div);

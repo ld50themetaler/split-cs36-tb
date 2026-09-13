@@ -5,6 +5,7 @@ name: split_cs36_tb
 type: shield
 features:
   - keys
+  - pointing
   - studio
 outputs:
   - usb

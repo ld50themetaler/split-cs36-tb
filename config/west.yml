@@ -11,11 +11,5 @@ manifest:
       remote: zmkfirmware
       revision: v0.3
       import: app/west.yml
-    - name: zmk-driver-paw3222
-      remote: sekigon-gonnoc
-      revision: main
-    - name: zmk-scroll-snap
-      remote: kot149
-      revision: v1
   self:
     path: config

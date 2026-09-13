@@ -290,13 +290,15 @@ void trackball_control_on_motion(int dx, int dy)
         return;
     }
 
-    // When motion detected, activate MOUSE_LAYER if not active
+    // When motion detected, activate MOUSE_LAYER if not already active
     if (!g_tb.automouse_active) {
-        g_tb.automouse_active = true;
-        if (!zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
-            zmk_keymap_layer_activate(MOUSE_LAYER_ID);
-            LOG_INF("Auto-Mouse: layer %d activated on motion", MOUSE_LAYER_ID);
+        if (zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
+            // Layer 4 is already active manually (e.g. held via &mo 4), do not interfere
+            return;
         }
+        g_tb.automouse_active = true;
+        zmk_keymap_layer_activate(MOUSE_LAYER_ID);
+        LOG_INF("Auto-Mouse: layer %d activated on motion", MOUSE_LAYER_ID);
     }
 
     // Reset timeout timer
@@ -608,12 +610,16 @@ static int position_state_listener(const zmk_event_t *eh)
 
     // If auto-mouse is active and a key is pressed:
     if (g_tb.automouse_active) {
-        // Exclude mouse action keys on layer 4 and thumb keys:
-        // Clicks: pos 15 (MCLK), 16 (LCLK), 18 (RCLK)
-        // Modifiers: pos 10 (LCTRL), 20 (LSHIFT)
-        // Thumbs: pos 30..35 (including TB_SCRL_MO at pos 33)
-        bool is_mouse_key = (ev->position == 15 || ev->position == 16 || ev->position == 18 ||
-                             ev->position == 10 || ev->position == 20 || ev->position >= 30);
+        // Exclude mouse action keys (layer 4 clicks, layer 1 clicks, click combos, thumbs):
+        // Layer 4 clicks: pos 15 (MCLK), 16 (LCLK), 18 (RCLK), 10 (LCTRL), 20 (LSHIFT)
+        // Layer 1 clicks: pos 25 (MCLK), 26 (LCLK), 27 (mo 4), 28 (RCLK)
+        // Click combos: pos 11, 12, 13
+        // All thumb keys: pos 30..35
+        bool is_mouse_key = (ev->position >= 30 ||
+                             ev->position == 15 || ev->position == 16 || ev->position == 18 ||
+                             ev->position == 25 || ev->position == 26 || ev->position == 27 || ev->position == 28 ||
+                             ev->position == 11 || ev->position == 12 || ev->position == 13 ||
+                             ev->position == 10 || ev->position == 20);
 
         if (is_mouse_key) {
             // Prolong auto-mouse timer during active clicking/dragging
@@ -642,5 +648,5 @@ void trackball_control_init(void)
 #if IS_ENABLED(CONFIG_SETTINGS)
     k_work_init_delayable(&g_tb.settings_save_work, settings_save_work_handler);
 #endif
-    LOG_INF("Kugel PAW3204 Advanced Control Subsystem initialized");
+    LOG_INF("split-cs36-tb PAW3222 Advanced Trackball Subsystem initialized");
 }
