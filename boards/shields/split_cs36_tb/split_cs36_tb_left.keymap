@@ -4,6 +4,21 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/trackball.h>
 
+#define TB_SPD_UP       1
+#define TB_SPD_DN       2
+#define TB_AM_TOG       3
+#define TB_SCRL_TOG     4
+#define TB_SCRL_MO      4
+#define TB_SCRL_UP      5
+#define TB_SCRL_DN      6
+#define TB_ACCEL_TOG    7
+#define TB_ROT_CW       8
+#define TB_ROT_CCW      9
+#define TB_ROT_RES      10
+#define TB_AM_TIME_UP   11
+#define TB_AM_TIME_DN   12
+#define TB_AM_TIME_RES  13
+
 / {
 
     behaviors {
@@ -11,6 +26,7 @@
             compatible = "zmk,behavior-trackball";
             #binding-cells = <1>;
             label = "TRACKBALL";
+            bindings = <&none>;
         };
 
         // デフォルトのMod-Tap(&mt)の挙動を上書きし、QMK風の快適な設定に変更します
