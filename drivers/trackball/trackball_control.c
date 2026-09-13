@@ -62,14 +62,14 @@ static const struct speed_ratio s_speed_table[MAX_SPEED_LEVEL] = {
     {  3, 16 }, // Level 16: 0.1875x
 };
 
-// Scroll Divisor Lookup Table (Level 1 to 6)
+// Scroll Divisor Lookup Table (Level 1 to 6, scaled for PAW3222 1064 CPI sensor)
 static const uint8_t s_scroll_div_table[MAX_SCROLL_LEVEL] = {
-    36, // Level 1: Very Slow / Ultra Smooth
-    28, // Level 2: Slow / Smooth
-    20, // Level 3: Normal / Balanced (Default)
-    15, // Level 4: Moderate / Responsive
-    10, // Level 5: Fast
-    6,  // Level 6: Ultra Fast (Legacy div 6)
+    108, // Level 1: Very Slow / Ultra Smooth
+    84,  // Level 2: Slow / Smooth
+    60,  // Level 3: Normal / Balanced (Default)
+    45,  // Level 4: Moderate / Responsive
+    30,  // Level 5: Fast
+    18,  // Level 6: Ultra Fast
 };
 
 struct rot_trig {
@@ -137,7 +137,7 @@ static struct tb_control_state g_tb = {
     .scroll_level = DEFAULT_SCROLL_LEVEL,
     .rotation_angle = DEFAULT_ROTATION_ANGLE,
     .automouse_timeout_ms = DEFAULT_AUTOMOUSE_TIMEOUT_MS,
-    .automouse_enabled = false,
+    .automouse_enabled = (DEFAULT_AUTOMOUSE_ENABLE != 0),
     .automouse_active = false,
     .sniper_active = false,
     .scroll_mode = false,
@@ -349,8 +349,10 @@ void trackball_control_calculate_motion(int dx, int dy, int *out_dx, int *out_dy
         den = den * 1000;
     }
 
-    int f_dx = (dx * num) / den;
-    int f_dy = (dy * num) / den;
+    // Divide by 3 baseline: PAW3222 is 1064 CPI (~2.7x higher resolution than PAW3204 400 CPI).
+    // Matches the original split-cs36-tb &zip_xy_scaler 1 3 baseline at Level 8 (1.00x).
+    int f_dx = (dx * num) / (den * 3);
+    int f_dy = (dy * num) / (den * 3);
 
     if (f_dx == 0 && dx != 0) f_dx = (dx > 0) ? 1 : -1;
     if (f_dy == 0 && dy != 0) f_dy = (dy > 0) ? 1 : -1;
@@ -604,12 +606,20 @@ static int position_state_listener(const zmk_event_t *eh)
         return ZMK_EV_EVENT_BUBBLE;
     }
 
-    // If auto-mouse is active and a non-mouse key is pressed:
-    // Dismiss auto-mouse layer immediately so user can type seamlessly without delay
+    // If auto-mouse is active and a key is pressed:
     if (g_tb.automouse_active) {
-        // Excluded thumb key positions that belong to mouse actions (e.g. clicks / scrolls)
-        // Matrix mapping: Row 0..2 are typing keys. Thumbs are index 36..42.
-        if (ev->position < 30) {
+        // Exclude mouse action keys on layer 4 and thumb keys:
+        // Clicks: pos 15 (MCLK), 16 (LCLK), 18 (RCLK)
+        // Modifiers: pos 10 (LCTRL), 20 (LSHIFT)
+        // Thumbs: pos 30..35 (including TB_SCRL_MO at pos 33)
+        bool is_mouse_key = (ev->position == 15 || ev->position == 16 || ev->position == 18 ||
+                             ev->position == 10 || ev->position == 20 || ev->position >= 30);
+
+        if (is_mouse_key) {
+            // Prolong auto-mouse timer during active clicking/dragging
+            k_work_reschedule(&g_tb.automouse_timeout_work, K_MSEC(g_tb.automouse_timeout_ms));
+        } else {
+            // Non-mouse typing key pressed: immediately dismiss auto-mouse layer for seamless typing
             g_tb.automouse_active = false;
             k_work_cancel_delayable(&g_tb.automouse_timeout_work);
             if (zmk_keymap_layer_active(MOUSE_LAYER_ID)) {
